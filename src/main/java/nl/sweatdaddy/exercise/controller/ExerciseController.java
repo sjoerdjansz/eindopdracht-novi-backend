@@ -1,11 +1,11 @@
-package nl.sweatdaddy.controller;
+package nl.sweatdaddy.exercise.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import nl.sweatdaddy.dto.ApiResponse;
-import nl.sweatdaddy.dto.CreateExerciseRequestDto;
-import nl.sweatdaddy.dto.ExerciseResponseDto;
-import nl.sweatdaddy.service.ExerciseService;
+import nl.sweatdaddy.common.ApiResponse;
+import nl.sweatdaddy.exercise.dto.CreateExerciseRequestDto;
+import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
+import nl.sweatdaddy.exercise.service.ExerciseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

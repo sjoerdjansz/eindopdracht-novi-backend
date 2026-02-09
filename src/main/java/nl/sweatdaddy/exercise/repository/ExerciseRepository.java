@@ -1,8 +1,8 @@
-package nl.sweatdaddy.repository;
+package nl.sweatdaddy.exercise.repository;
 
 import java.util.List;
 import java.util.Optional;
-import nl.sweatdaddy.entity.Exercise;
+import nl.sweatdaddy.exercise.entity.Exercise;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 // Verantwoordelijkheden van de repository zijn:

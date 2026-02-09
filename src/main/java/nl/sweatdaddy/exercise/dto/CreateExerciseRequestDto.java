@@ -1,4 +1,4 @@
-package nl.sweatdaddy.dto;
+package nl.sweatdaddy.exercise.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

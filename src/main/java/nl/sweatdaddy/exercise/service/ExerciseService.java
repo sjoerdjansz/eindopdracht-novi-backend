@@ -1,12 +1,12 @@
-package nl.sweatdaddy.service;
+package nl.sweatdaddy.exercise.service;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
-import nl.sweatdaddy.dto.CreateExerciseRequestDto;
-import nl.sweatdaddy.dto.ExerciseResponseDto;
-import nl.sweatdaddy.entity.Exercise;
+import nl.sweatdaddy.exercise.dto.CreateExerciseRequestDto;
+import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
+import nl.sweatdaddy.exercise.entity.Exercise;
 import nl.sweatdaddy.exception.ConflictException;
-import nl.sweatdaddy.repository.ExerciseRepository;
+import nl.sweatdaddy.exercise.repository.ExerciseRepository;
 import org.springframework.stereotype.Service;
 import nl.sweatdaddy.exception.NotFoundException;
 
