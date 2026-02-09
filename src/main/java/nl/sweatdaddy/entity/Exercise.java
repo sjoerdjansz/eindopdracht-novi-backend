@@ -51,4 +51,15 @@ public class Exercise {
     return movement;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setMuscles(String muscles) {
+    this.muscles = muscles;
+  }
+
+  public void setMovement(String movement) {
+    this.movement = movement;
+  }
 }
