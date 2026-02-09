@@ -1,4 +1,4 @@
-package nl.sweatdaddy.exception;
+package nl.sweatdaddy.common.exception;
 
 import java.util.HashMap;
 import java.util.Map;

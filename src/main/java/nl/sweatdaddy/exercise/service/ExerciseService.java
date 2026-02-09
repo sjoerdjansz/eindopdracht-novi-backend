@@ -5,10 +5,10 @@ import java.util.List;
 import nl.sweatdaddy.exercise.dto.CreateExerciseRequestDto;
 import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
 import nl.sweatdaddy.exercise.entity.Exercise;
-import nl.sweatdaddy.exception.ConflictException;
+import nl.sweatdaddy.common.exception.ConflictException;
 import nl.sweatdaddy.exercise.repository.ExerciseRepository;
 import org.springframework.stereotype.Service;
-import nl.sweatdaddy.exception.NotFoundException;
+import nl.sweatdaddy.common.exception.NotFoundException;
 
 /* De service bevat de business logica.
  * Op de informatie (oefeningen) kan de business logica worden losgelaten, zoals:
@@ -29,9 +29,10 @@ public class ExerciseService {
     this.exerciseRepository = exerciseRepository;
   }
 
+  // hier zit de mapper nog in de stream, later nog omzetten naar de mapper functie.
   public List<ExerciseResponseDto> getAllExercises() {
     return exerciseRepository.findAll().stream()
-        .map(e -> new ExerciseResponseDto(e.getName(), e.getMuscles(), e.getMovement())).toList();
+        .map(exercise -> new ExerciseResponseDto(exercise.getName(), exercise.getMuscles(), exercise.getMovement())).toList();
   }
 
   public ExerciseResponseDto getExerciseById(Long id) {
