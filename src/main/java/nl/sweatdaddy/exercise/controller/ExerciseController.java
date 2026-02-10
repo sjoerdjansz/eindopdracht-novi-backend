@@ -1,7 +1,9 @@
 package nl.sweatdaddy.exercise.controller;
 
 import jakarta.validation.Valid;
+
 import java.util.List;
+
 import nl.sweatdaddy.common.ApiResponse;
 import nl.sweatdaddy.exercise.dto.CreateExerciseRequestDto;
 import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
@@ -22,66 +24,80 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/exercises")
 public class ExerciseController {
 
-  private final ExerciseService exerciseService;
+    private final ExerciseService exerciseService;
 
-  public ExerciseController(ExerciseService exerciseService) {
-    this.exerciseService = exerciseService;
-  }
-
-  @GetMapping
-  public ResponseEntity<ApiResponse<List<ExerciseResponseDto>>> getExercises(
-      @RequestParam(required = false) String name, @RequestParam(required = false) String muscles,
-      @RequestParam(required = false) String movement) {
-    List<ExerciseResponseDto> exercises;
-
-    if (name != null && !name.isBlank()) {
-      exercises = exerciseService.getByName(name); // toevoegen aan service
-    } else if (muscles != null && !muscles.isBlank()) {
-      exercises = exerciseService.getByMuscles(muscles);
-    } else if (movement != null && !movement.isBlank()) {
-      exercises = exerciseService.getByMovement(movement);
-    } else {
-      exercises = exerciseService.getAllExercises();
+    public ExerciseController(ExerciseService exerciseService) {
+        this.exerciseService = exerciseService;
     }
 
-    return ResponseEntity.ok(
-        new ApiResponse<>(
-            exercises,
-            "All exercises successfully retrieved"
-        )
-    );
-  }
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<ExerciseResponseDto>>> getExercises(
+            @RequestParam(required = false)
+            String name,
+            @RequestParam(required = false)
+            String muscles,
+            @RequestParam(required = false)
+            String movement) {
+        List<ExerciseResponseDto> exercises;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<ApiResponse<ExerciseResponseDto>> getExercise(@PathVariable("id") Long id) {
-    ExerciseResponseDto dto = exerciseService.getExerciseById(id);
-    return ResponseEntity.ok(new ApiResponse<>(dto, "Exercise found"));
-  }
+        if (name != null && !name.isBlank()) {
+            exercises = exerciseService.getByName(name); // toevoegen aan service
+        } else if (muscles != null && !muscles.isBlank()) {
+            exercises = exerciseService.getByMuscles(muscles);
+        } else if (movement != null && !movement.isBlank()) {
+            exercises = exerciseService.getByMovement(movement);
+        } else {
+            exercises = exerciseService.getAllExercises();
+        }
 
-  @PostMapping
-  public ResponseEntity<ApiResponse<ExerciseResponseDto>> createExercise(
-      @RequestBody @Valid CreateExerciseRequestDto request) {
-
-    ExerciseResponseDto created = exerciseService.create(request);
-
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new ApiResponse<>(created, "Exercises added to library")
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        exercises,
+                        "All exercises successfully retrieved"
+                )
         );
-  }
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<ApiResponse<ExerciseResponseDto>> updateExercise(
-      @PathVariable Long id, @RequestBody @Valid CreateExerciseRequestDto request) {
-    ExerciseResponseDto updated = exerciseService.update(id, request); // nog maken in service
-    return ResponseEntity.ok(new ApiResponse<>(updated, "Exercise has been updated"));
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ExerciseResponseDto>> getExercise(
+            @PathVariable("id")
+            Long id) {
+        ExerciseResponseDto dto = exerciseService.getExerciseById(id);
+        return ResponseEntity.ok(new ApiResponse<>(dto, "Exercise found"));
+    }
 
-  }
+    @PostMapping
+    public ResponseEntity<ApiResponse<ExerciseResponseDto>> createExercise(
+            @RequestBody
+            @Valid
+            CreateExerciseRequestDto request) {
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<ApiResponse<ExerciseResponseDto>> deleteExercise(@PathVariable Long id) {
-    ExerciseResponseDto deleted = exerciseService.delete(id);
-    return ResponseEntity.ok(new ApiResponse<>(deleted, "Exercise succesfully deleted"));
-  }
+        ExerciseResponseDto created = exerciseService.create(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(created, "Exercises added to library")
+                );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ExerciseResponseDto>> updateExercise(
+            @PathVariable
+            Long id,
+            @RequestBody
+            @Valid
+            CreateExerciseRequestDto request) {
+        ExerciseResponseDto updated = exerciseService.update(id, request);
+        return ResponseEntity.ok(new ApiResponse<>(updated, "Exercise has been updated"));
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<ExerciseResponseDto>> deleteExercise(
+            @PathVariable
+            Long id) {
+        ExerciseResponseDto deleted = exerciseService.delete(id);
+        return ResponseEntity.ok(new ApiResponse<>(deleted, "Exercise succesfully deleted"));
+    }
 
 }
 

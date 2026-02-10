@@ -9,94 +9,108 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import nl.sweatdaddy.exercise.entity.Exercise;
-import org.springframework.cglib.core.Local;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "workouts")
 public class Workout {
 
-  private @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    private @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-  @Column(nullable = false, length = 100)
-  private String name;
-  @Column(nullable = false)
-  private LocalDateTime createdAt;
-  @Column(nullable = false, length = 100)
-  private String createdBy;
+    @Column(nullable = false, length = 100)
+    private String name;
+    @Column(nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+    @Column(nullable = false, length = 100)
+    private String createdBy;
 
-  @ManyToMany
-  @JoinTable(
-      name = "workout_exercises",
-      joinColumns = @JoinColumn(name = "workout_id"),
-      inverseJoinColumns = @JoinColumn(name = "exercise_id")
-  )
+    @ManyToMany
+    @JoinTable(
+            name = "workout_exercises",
+            joinColumns = @JoinColumn(name = "workout_id"),
+            inverseJoinColumns = @JoinColumn(name = "exercise_id")
+    )
+    private List<Exercise> exerciseList = new ArrayList<>();
+    private String notes;
 
-  private List<Exercise> exerciseList = new ArrayList<>();
-  private String notes;
+    protected Workout() {
+    }
 
-  protected Workout() {
-  }
+    public Workout(Long id, String name, LocalDateTime createdAt, LocalDateTime updatedAt, String createdBy,
+                   List<Exercise> exerciseList, String notes) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.exerciseList = exerciseList;
+        this.notes = notes;
+    }
 
-  public Workout(Long id, String name, LocalDateTime createdAt, String createdBy,
-      List<Exercise> exerciseList, String notes) {
-    this.id = id;
-    this.name = name;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.exerciseList = exerciseList;
-    this.notes = notes;
-  }
+    public List<Exercise> getExerciseList() {
+        return exerciseList;
+    }
 
-  public List<Exercise> getExerciseList() {
-    return exerciseList;
-  }
+    public void setExerciseList(List<Exercise> exerciseList) {
+        this.exerciseList = exerciseList;
+    }
 
-  public void setExerciseList(List<Exercise> exerciseList) {
-    this.exerciseList = exerciseList;
-  }
+    public String getCreatedBy() {
+        return createdBy;
+    }
 
-  public String getCreatedBy() {
-    return createdBy;
-  }
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getNotes() {
-    return notes;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setNotes(String notes) {
-    this.notes = notes;
-  }
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
