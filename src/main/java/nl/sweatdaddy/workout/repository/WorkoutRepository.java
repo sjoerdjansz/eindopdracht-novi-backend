@@ -15,7 +15,4 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
   List<Workout>findAllByOrderByCreatedAtAsc();
   List<Workout>findAllByCreatedAt(LocalDateTime createdAt);
 
-
-
-
 }

@@ -24,7 +24,6 @@ public class CreateWorkoutRequestDto {
     return name;
   }
 
-
   public String getCreatedBy() {
     return createdBy;
   }
