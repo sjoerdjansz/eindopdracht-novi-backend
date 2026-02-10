@@ -1,4 +1,4 @@
-package nl.sweatdaddy.entity;
+package nl.sweatdaddy.exercise.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

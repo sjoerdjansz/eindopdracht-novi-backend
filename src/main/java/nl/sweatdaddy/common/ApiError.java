@@ -1,4 +1,4 @@
-package nl.sweatdaddy.dto;
+package nl.sweatdaddy.common;
 
 import java.util.Map;
 

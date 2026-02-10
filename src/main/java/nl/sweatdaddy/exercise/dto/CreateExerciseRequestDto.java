@@ -1,12 +1,10 @@
-package nl.sweatdaddy.dto;
+package nl.sweatdaddy.exercise.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CreateExerciseRequestDto {
 
-
-  private Long id; // Als het goed is feitelijk overbodig
   @NotBlank(message = "Name is required")
   @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
   private String name;
@@ -14,10 +12,6 @@ public class CreateExerciseRequestDto {
   private String muscles;
   @NotBlank(message = "Movement is required")
   private String movement;
-
-  public Long getId() {
-    return id;
-  } // Als het goed is feitelijk overbodig
 
   public String getName() {
     return name;

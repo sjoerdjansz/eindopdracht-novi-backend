@@ -1,4 +1,4 @@
-package nl.sweatdaddy.dto;
+package nl.sweatdaddy.exercise.dto;
 
 
 // Exercise data transfer object is een speciale class die we gebruiken als blauwdruk van een exercise.

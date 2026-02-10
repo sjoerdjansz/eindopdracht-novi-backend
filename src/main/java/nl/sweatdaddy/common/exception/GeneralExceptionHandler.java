@@ -1,9 +1,8 @@
-package nl.sweatdaddy.exception;
+package nl.sweatdaddy.common.exception;
 
 import java.util.HashMap;
 import java.util.Map;
-import nl.sweatdaddy.dto.ApiError;
-import org.apache.coyote.Response;
+import nl.sweatdaddy.common.ApiError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

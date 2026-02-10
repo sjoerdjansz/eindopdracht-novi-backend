@@ -1,4 +1,4 @@
-package nl.sweatdaddy.dto;
+package nl.sweatdaddy.common;
 
 /* Dit is geen domeinspecifieke dto zoals de exerciseDto, maar een transportDto
 * Hij beschrijft hoe de API responses eruit moeten zien en niet wat een exercise is.

@@ -1,3 +1,4 @@
+-- EXERCISES
 INSERT INTO exercises (name, muscles, movement)
 VALUES ('bench press', 'pectoralis major, triceps brachii, anterior deltoid', 'horizontal press');
 
@@ -27,3 +28,45 @@ VALUES ('lat pulldown', 'latissimus dorsi, biceps brachii, teres major', 'vertic
 
 INSERT INTO exercises (name, muscles, movement)
 VALUES ('push-up', 'pectoralis major, triceps brachii, anterior deltoid', 'horizontal press');
+
+
+-- WORKOUTS
+INSERT INTO workouts (name, created_at, created_by, notes)
+VALUES (
+           'Full Body Strength',
+           NOW(),
+           'Sjoerd',
+           'Focus on compound lifts, moderate volume'
+       );
+
+INSERT INTO workouts (name, created_at, created_by, notes)
+VALUES (
+           'Upper Body Push',
+           NOW(),
+           'Sjoerd',
+           'Chest, shoulders and triceps emphasis'
+       );
+
+INSERT INTO workouts (name, created_at, created_by, notes)
+VALUES (
+           'Upper Body Pull',
+           NOW(),
+           'Sjoerd',
+           'Back and biceps focus'
+       );
+
+INSERT INTO workouts (name, created_at, created_by, notes)
+VALUES (
+           'Lower Body Strength',
+           NOW(),
+           'Coach Henk',
+           'Heavy squat and hip dominant movements'
+       );
+
+INSERT INTO workouts (name, created_at, created_by, notes)
+VALUES (
+           'Glutes & Legs',
+           NOW(),
+           'Coach Boy',
+           'Glute-focused hypertrophy session'
+       );
