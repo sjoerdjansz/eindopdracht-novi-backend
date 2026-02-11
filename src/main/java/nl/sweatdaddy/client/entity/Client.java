@@ -29,7 +29,7 @@ public class Client {
     private LocalDateTime createdAt;
 
     @ManyToMany
-    // join table is nu simpel en anoniem. Voor in de toekomst is een eigen join entity eventueel handig zodat
+    // join table is nu simpel en feitelijk anoniem. Voor in de toekomst is een eigen join entity eventueel handig zodat
     // metadata ook gebruikt kan worden en ik invloed kan uitoefenen op meer data en informatie.
     @JoinTable(
             name = "client_workouts",
