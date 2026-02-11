@@ -13,6 +13,7 @@ import nl.sweatdaddy.workout.dto.CreateWorkoutRequestDto;
 import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.entity.Workout;
 import nl.sweatdaddy.workout.repository.WorkoutRepository;
+import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,11 +41,18 @@ public class WorkoutService {
             throw new ConflictException("Workout name '" + request.getName() + "' already exists");
         }
 
-        // zoekt de exercise objecten op obv de ids uit de dto
-        List<Exercise> exercises = exerciseRepository.findAllById(request.getExerciseIds());
+        // zoekt de exercise objecten op obv de ids uit de dto en checkt of er niet per ongeluk exercises
+        // worden toegevoegd die niet bestaan
+        List<Long> requestedIds = request.getExerciseIds();
+        List<Exercise> exercises = exerciseRepository.findAllById(requestedIds);
+
+        if (exercises.size() != requestedIds.size()) {
+            List<Long> foundIds = exercises.stream().map(exercise -> exercise.getId()).toList();
+            List<Long> missingIds = requestedIds.stream().filter(id -> !foundIds.contains(id)).toList();
+            throw new NotFoundException("Exercises with id's: " + missingIds + " not found.");
+        }
 
         // maakt de workout entity met de gevonden lijst van oefeningen
-
         Workout entity = new Workout(
                 null,
                 request.getName(),
@@ -68,16 +76,26 @@ public class WorkoutService {
         String newName = request.getName().trim();
 
         // checken of naam al bestaat bij een van de andere workouts
-        workoutRepository.findByNameIgnoreCase(newName).filter(
-                        foundWorkout -> !foundWorkout.getId().equals(id))
-                .ifPresent(foundWorkout -> {
-                    throw new ConflictException("Workout name already exists");
-                });
+        if(!workout.getName().equalsIgnoreCase(newName)) {
+            if(workoutRepository.existsByNameIgnoreCase(newName)) {
+                throw new ConflictException("Workout name " + newName + " already exists");
+            }
+        }
 
-        List<Exercise> exercises = exerciseRepository.findAllById(request.getExerciseIds());
+        // zoekt de exercise objecten op obv de ids uit de dto en checkt of er niet per ongeluk exercises
+        // worden toegevoegd die niet bestaan
+        List<Long> requestedIds = request.getExerciseIds();
+        List<Exercise> exercises = exerciseRepository.findAllById(requestedIds);
+
+        if (exercises.size() != requestedIds.size()) {
+            List<Long> foundIds = exercises.stream().map(exercise -> exercise.getId()).toList();
+            List<Long> missingIds = requestedIds.stream().filter(reqId -> !foundIds.contains(reqId)).toList();
+            throw new NotFoundException("Exercises with id's: " + missingIds + " not found.");
+        }
 
         workout.setName(newName);
         workout.setNotes(request.getNotes());
+        workout.setCreatedBy(request.getCreatedBy());
         workout.setExerciseList(exercises);
 
         Workout updatedWorkout = workoutRepository.save(workout);

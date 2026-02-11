@@ -5,22 +5,16 @@ import nl.sweatdaddy.client.dto.ClientResponseDto;
 import nl.sweatdaddy.client.dto.CreateClientRequestDto;
 import nl.sweatdaddy.client.entity.Client;
 import nl.sweatdaddy.client.repository.ClientRepository;
-import nl.sweatdaddy.common.ApiResponse;
 import nl.sweatdaddy.common.exception.ConflictException;
 import nl.sweatdaddy.common.exception.NotFoundException;
 import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
-import nl.sweatdaddy.exercise.entity.Exercise;
 import nl.sweatdaddy.exercise.repository.ExerciseRepository;
 import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.entity.Workout;
 import nl.sweatdaddy.workout.repository.WorkoutRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -132,6 +126,18 @@ public class ClientService {
         }
 
         client.getWorkoutList().add(foundWorkout);
+
+        return toDto(client);
+    }
+
+    // workout van client verwijderen
+    @Transactional
+    public ClientResponseDto deleteWorkoutFromClient(Long id, Long workoutId) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new NotFoundException("Client not found"));
+        Workout foundWorkout = workoutRepository.findById(workoutId).orElseThrow(
+                () -> new NotFoundException("Workout not found"));
+
+        client.getWorkoutList().remove(foundWorkout);
 
         return toDto(client);
     }

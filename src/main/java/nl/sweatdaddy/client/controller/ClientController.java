@@ -86,10 +86,12 @@ public class ClientController {
             Long workoutId
     ) {
 
-        ClientResponseDto assignedWorkout = clientService.addWorkoutToClient(id, workoutId);
+        ClientResponseDto updatedClientWorkouts = clientService.addWorkoutToClient(id, workoutId);
+
         return ResponseEntity.ok(
-                new ApiResponse<>(null, "Workout with id " + workoutId + " added."));
+                new ApiResponse<>(updatedClientWorkouts, "Workout with id " + workoutId + " added."));
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ClientResponseDto>> updateClient(
@@ -111,9 +113,20 @@ public class ClientController {
     ) {
         ClientResponseDto deleted = clientService.delete(id);
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(null, "Client " + deleted.getFirstName() + " " + deleted.getLastName() +
-                                        " deleted"));
+        return ResponseEntity.noContent().build();
     }
+
+    // workout van client verwijderen
+    @DeleteMapping("/{id}/workouts/{workoutId}")
+    ResponseEntity<ApiResponse<ClientResponseDto>> deleteWorkoutFromClient(
+            @PathVariable
+            Long id,
+            @PathVariable
+            Long workoutId) {
+        ClientResponseDto deletedWorkout = clientService.deleteWorkoutFromClient(id, workoutId);
+
+        return ResponseEntity.ok(new ApiResponse<>(deletedWorkout, "Workout successfully deleted"));
+    }
+
 
 }
