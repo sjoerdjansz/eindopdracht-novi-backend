@@ -84,6 +84,7 @@ public class WorkoutService {
         return toDto(updatedWorkout);
     }
 
+    // workout verwijderen
     @Transactional
     public WorkoutResponseDto delete(Long id) {
         Workout workout = workoutRepository.findById(id).orElseThrow(
@@ -93,7 +94,6 @@ public class WorkoutService {
 
         return toDto(workout);
     }
-
 
     // mapper
     private WorkoutResponseDto toDto(Workout workout) {

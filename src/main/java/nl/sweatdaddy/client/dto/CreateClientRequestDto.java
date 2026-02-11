@@ -18,8 +18,8 @@ public class CreateClientRequestDto {
     @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
     private String lastName;
 
-    @NotNull(message = "A valid email is required")
-    @Email
+    @NotBlank(message = "Email can't be empty")
+    @Email(message = "Email must be valid")
     private String email;
 
     @NotNull(message = "Invalid birthday")
