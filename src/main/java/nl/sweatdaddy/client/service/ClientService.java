@@ -71,6 +71,7 @@ public class ClientService {
                 request.getLastName(),
                 request.getEmail(),
                 request.getBirthday(),
+                null,
                 null
         );
 

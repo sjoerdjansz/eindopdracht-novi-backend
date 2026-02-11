@@ -3,14 +3,14 @@ package nl.sweatdaddy.client.controller;
 import jakarta.validation.Valid;
 import nl.sweatdaddy.client.dto.ClientResponseDto;
 import nl.sweatdaddy.client.dto.CreateClientRequestDto;
-import nl.sweatdaddy.client.entity.Client;
 import nl.sweatdaddy.client.service.ClientService;
 import nl.sweatdaddy.common.ApiResponse;
+import nl.sweatdaddy.fileUpload.service.FileUploadService;
 import nl.sweatdaddy.workout.service.WorkoutService;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,12 +24,16 @@ public class ClientController {
     // van final omdat deze niet overschreven mag worden.
     private final ClientService clientService;
     private final WorkoutService workoutService;
+    private final FileUploadService fileUploadService;
 
     // we maken de clientController constructor die als parameter de clientService krijgt. Zodat we de
     // clientService kunnen aanroepen in de controller.
-    public ClientController(ClientService clientService, WorkoutService workoutService) {
+    public ClientController(ClientService clientService, WorkoutService workoutService,
+                            FileUploadService fileUploadService
+    ) {
         this.clientService = clientService;
         this.workoutService = workoutService;
+        this.fileUploadService = fileUploadService;
     }
 
     @GetMapping
@@ -91,6 +95,17 @@ public class ClientController {
         return ResponseEntity.ok(
                 new ApiResponse<>(updatedClientWorkouts, "Workout with id " + workoutId + " added."));
     }
+
+    // TODO: endpoint afmaken voor file upload
+//    @PostMapping("/{id}/profile-picture")
+//    public ResponseEntity<ApiResponse<String>> fileUpload(
+//            @PathVariable
+//            Long id,
+//            @RequestParam("file")
+//            MultipartFile file) {
+//        String fileName = fileUploadService.storeFile(file); // methode maken in service
+//        return ResponseEntity.ok(new ApiResponse<>(fileName, "Profile image uploaded succesfully"));
+//    }
 
 
     @PutMapping("/{id}")

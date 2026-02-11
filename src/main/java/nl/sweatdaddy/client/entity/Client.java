@@ -1,7 +1,6 @@
 package nl.sweatdaddy.client.entity;
 
 import jakarta.persistence.*;
-import nl.sweatdaddy.exercise.entity.Exercise;
 import nl.sweatdaddy.workout.entity.Workout;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -38,17 +37,19 @@ public class Client {
             uniqueConstraints = @UniqueConstraint(columnNames = {"client_id", "workout_id"})
     )
     private List<Workout> workoutList = new ArrayList<>();
+    private String profilePicture;
 
     protected Client() {
     }
 
     public Client(String firstName, String lastName, String email, LocalDate birthday,
-                  List<Workout> workoutList) {
+                  List<Workout> workoutList, String profilePicture) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthday = birthday;
         this.workoutList = workoutList;
+        this.profilePicture = profilePicture;
     }
 
     public Long getId() {
@@ -97,5 +98,13 @@ public class Client {
 
     public void setWorkoutList(List<Workout> workoutList) {
         this.workoutList = workoutList;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }
