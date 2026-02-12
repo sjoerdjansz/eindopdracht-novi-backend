@@ -9,12 +9,16 @@ import nl.sweatdaddy.common.exception.ConflictException;
 import nl.sweatdaddy.common.exception.NotFoundException;
 import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
 import nl.sweatdaddy.exercise.repository.ExerciseRepository;
+import nl.sweatdaddy.fileUpload.entity.File;
+import nl.sweatdaddy.fileUpload.repository.FileUploadRepository;
 import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.entity.Workout;
 import nl.sweatdaddy.workout.repository.WorkoutRepository;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -22,13 +26,15 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final WorkoutRepository workoutRepository;
     private final ExerciseRepository exerciseRepository;
+    private final FileUploadRepository fileUploadRepository;
 
 
     public ClientService(ClientRepository clientRepository, WorkoutRepository workoutRepository,
-                         ExerciseRepository exerciseRepository) {
+                         ExerciseRepository exerciseRepository, FileUploadRepository fileUploadRepository) {
         this.clientRepository = clientRepository;
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
+        this.fileUploadRepository = fileUploadRepository;
     }
 
     // alle clienten ophalen
@@ -77,7 +83,7 @@ public class ClientService {
 
         Client saved = clientRepository.save(entity);
         return new ClientResponseDto(saved.getId(), saved.getFirstName(), saved.getLastName(),
-                                     saved.getEmail(), saved.getBirthday(), null);
+                                     saved.getEmail(), saved.getBirthday(), null, null);
     }
 
     // client updaten
@@ -134,13 +140,25 @@ public class ClientService {
     // workout van client verwijderen
     @Transactional
     public ClientResponseDto deleteWorkoutFromClient(Long id, Long workoutId) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new NotFoundException("Client not found"));
+        Client client = clientRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Client not found"));
         Workout foundWorkout = workoutRepository.findById(workoutId).orElseThrow(
                 () -> new NotFoundException("Workout not found"));
 
         client.getWorkoutList().remove(foundWorkout);
 
         return toDto(client);
+    }
+
+    @Transactional
+    public ClientResponseDto addProfilePictureToClient(String fileName, Long clientId) {
+        Client clientFound = clientRepository.findById(clientId).orElseThrow(() -> new NotFoundException("Client not found"));
+        nl.sweatdaddy.fileUpload.entity.File fileFound = fileUploadRepository.findByFileName(fileName).orElseThrow(() -> new NotFoundException("File not found"));
+
+        clientFound.setProfilePicture(fileFound);
+        Client savedClient = clientRepository.save(clientFound);
+
+        return toDto(clientFound);
     }
 
     // mapper
@@ -156,8 +174,14 @@ public class ClientService {
                                                   workout.getCreatedBy(), exerciseDtos, workout.getNotes());
                 }
         ).toList();
+
+        String fileName = null;
+        if (client.getProfilePictureLocation() != null) {
+            fileName = client.getProfilePictureLocation().getFileName();
+        }
+
         return new ClientResponseDto(client.getId(), client.getFirstName(), client.getLastName(),
-                                     client.getEmail(), client.getBirthday(), workoutDtos);
+                                     client.getEmail(), client.getBirthday(), workoutDtos, fileName);
     }
 
 }

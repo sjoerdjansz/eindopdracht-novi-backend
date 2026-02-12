@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 
+
+// Let op: het bestand staat hier niet opgeslagen, maar alleen de referentie naar de file in de uploads map
 @Entity
 public class File {
 
@@ -14,6 +16,19 @@ public class File {
 
     private String fileName;
 
-    @Lob
-    private byte[] docFile;
+//    niet nodig
+//    @Lob
+//    private byte[] docFile;
+
+    public File(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public File() {
+
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
 }

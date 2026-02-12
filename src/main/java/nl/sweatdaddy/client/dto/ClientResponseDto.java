@@ -13,15 +13,17 @@ public class ClientResponseDto {
     private final String email;
     private final LocalDate birthday;
     private final List<WorkoutResponseDto> workoutList;
+    private final String fileName;
 
     public ClientResponseDto(Long id, String firstName, String lastName, String email, LocalDate birthday,
-                             List<WorkoutResponseDto> workoutList) {
+                             List<WorkoutResponseDto> workoutList, String fileName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthday = birthday;
         this.workoutList = workoutList;
+        this.fileName = fileName;
     }
 
     public Long getId() {
@@ -46,5 +48,9 @@ public class ClientResponseDto {
 
     public List<WorkoutResponseDto> getWorkoutList() {
         return workoutList;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 }

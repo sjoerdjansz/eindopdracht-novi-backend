@@ -1,6 +1,7 @@
 package nl.sweatdaddy.client.entity;
 
 import jakarta.persistence.*;
+import nl.sweatdaddy.fileUpload.entity.File;
 import nl.sweatdaddy.workout.entity.Workout;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -28,7 +29,8 @@ public class Client {
     private LocalDateTime createdAt;
 
     @ManyToMany
-    // join table is nu simpel en feitelijk anoniem. Voor in de toekomst is een eigen join entity eventueel handig zodat
+    // join table is nu simpel en feitelijk anoniem. Voor in de toekomst is een eigen join entity eventueel
+    // handig zodat
     // metadata ook gebruikt kan worden en ik invloed kan uitoefenen op meer data en informatie.
     @JoinTable(
             name = "client_workouts",
@@ -37,19 +39,26 @@ public class Client {
             uniqueConstraints = @UniqueConstraint(columnNames = {"client_id", "workout_id"})
     )
     private List<Workout> workoutList = new ArrayList<>();
-    private String profilePicture;
 
+
+//        Optie 1
+        @OneToOne
+        File clientProfilePicture;
+
+//    private String profilePictureLocation;
+
+    // Optie 2
     protected Client() {
     }
 
     public Client(String firstName, String lastName, String email, LocalDate birthday,
-                  List<Workout> workoutList, String profilePicture) {
+                  List<Workout> workoutList, File clientProfilePicture) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthday = birthday;
         this.workoutList = workoutList;
-        this.profilePicture = profilePicture;
+        this.clientProfilePicture = clientProfilePicture;
     }
 
     public Long getId() {
@@ -100,11 +109,11 @@ public class Client {
         this.workoutList = workoutList;
     }
 
-    public String getProfilePicture() {
-        return profilePicture;
+    public File getProfilePictureLocation() {
+        return clientProfilePicture;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setProfilePicture(File clientProfilePicture) {
+        this.clientProfilePicture = clientProfilePicture;
     }
 }

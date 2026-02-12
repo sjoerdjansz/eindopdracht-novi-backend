@@ -3,16 +3,22 @@ package nl.sweatdaddy.client.controller;
 import jakarta.validation.Valid;
 import nl.sweatdaddy.client.dto.ClientResponseDto;
 import nl.sweatdaddy.client.dto.CreateClientRequestDto;
+import nl.sweatdaddy.client.entity.Client;
 import nl.sweatdaddy.client.service.ClientService;
 import nl.sweatdaddy.common.ApiResponse;
 import nl.sweatdaddy.fileUpload.service.FileUploadService;
 import nl.sweatdaddy.workout.service.WorkoutService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/clients")
@@ -96,17 +102,25 @@ public class ClientController {
                 new ApiResponse<>(updatedClientWorkouts, "Workout with id " + workoutId + " added."));
     }
 
-    // TODO: endpoint afmaken voor file upload
-//    @PostMapping("/{id}/profile-picture")
-//    public ResponseEntity<ApiResponse<String>> fileUpload(
-//            @PathVariable
-//            Long id,
-//            @RequestParam("file")
-//            MultipartFile file) {
-//        String fileName = fileUploadService.storeFile(file); // methode maken in service
-//        return ResponseEntity.ok(new ApiResponse<>(fileName, "Profile image uploaded succesfully"));
-//    }
+    @PostMapping("/{id}/profile-picture")
+    public ResponseEntity<ClientResponseDto> addPictureToClient(
+            @PathVariable
+            Long id,
+            @RequestParam("file")
+            MultipartFile file) throws IOException {
 
+        String fileName = fileUploadService.storeFile(file);
+
+        ClientResponseDto clientResponseDto = clientService.addProfilePictureToClient(fileName, id);
+
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/clients/").path(
+                Objects.requireNonNull(id.toString())).path("profile-picture").toUriString();
+
+        return ResponseEntity.created(URI.create(url)).body(clientResponseDto);
+
+    }
+
+    // TODO: Delete file functionaliteit maken?
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ClientResponseDto>> updateClient(
