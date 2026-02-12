@@ -1,14 +1,6 @@
 package nl.sweatdaddy.workout.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,7 +31,8 @@ public class Workout {
     @JoinTable(
             name = "workout_exercises",
             joinColumns = @JoinColumn(name = "workout_id"),
-            inverseJoinColumns = @JoinColumn(name = "exercise_id")
+            inverseJoinColumns = @JoinColumn(name = "exercise_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"workout_id", "exercise_id"})
     )
     private List<Exercise> exerciseList = new ArrayList<>();
     private String notes;

@@ -8,8 +8,6 @@ import nl.sweatdaddy.common.ApiResponse;
 import nl.sweatdaddy.workout.dto.CreateWorkoutRequestDto;
 import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.service.WorkoutService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/workouts")
 public class WorkoutController {
-
-    // TODO: Logger nog verwijderen
-    private static final Logger log =
-            LoggerFactory.getLogger(WorkoutController.class);
-
 
     private final WorkoutService workoutService;
 

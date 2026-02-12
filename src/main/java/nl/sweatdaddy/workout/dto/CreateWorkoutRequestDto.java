@@ -13,7 +13,7 @@ public class CreateWorkoutRequestDto {
   @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
   private String name;
   @NotEmpty(message = "Author name is required")
-  @Size(min = 3, max = 100, message = "Created by field is required")
+  @Size(min = 3, max = 100, message = "Created by field must be between 3 and 100 characters")
   private String createdBy;
   @Size(min = 3, max = 255, message = "Notes must be between 3 and 255 characters")
   private String notes;
@@ -23,7 +23,6 @@ public class CreateWorkoutRequestDto {
   public String getName() {
     return name;
   }
-
 
   public String getCreatedBy() {
     return createdBy;
