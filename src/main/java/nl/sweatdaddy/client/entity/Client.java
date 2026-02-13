@@ -38,6 +38,7 @@ public class Client {
             inverseJoinColumns = @JoinColumn(name = "workout_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"client_id", "workout_id"})
     )
+
     private List<Workout> workoutList = new ArrayList<>();
 
 

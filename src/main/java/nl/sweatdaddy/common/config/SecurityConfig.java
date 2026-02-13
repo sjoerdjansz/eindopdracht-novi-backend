@@ -36,6 +36,8 @@ public class SecurityConfig {
     private String clientId;
 
     @Bean
+
+    // feitelijk de routing regels
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
@@ -56,6 +58,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // nu niet echt nodig want geen connectie met de frontend
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -69,6 +72,7 @@ public class SecurityConfig {
         return source;
     }
 
+    // validatie of de jwt geldig is
     @Bean
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
@@ -83,6 +87,7 @@ public class SecurityConfig {
     }
 
 
+    //specifieke rol distilleren
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
