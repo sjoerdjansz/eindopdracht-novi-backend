@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.sweatdaddy.client.entity.Client;
 import nl.sweatdaddy.exercise.entity.Exercise;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,6 +27,9 @@ public class Workout {
     private LocalDateTime updatedAt;
     @Column(nullable = false, length = 100)
     private String createdBy;
+
+    @ManyToMany(mappedBy = "workoutList")
+    private List<Client> clients = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -105,5 +109,9 @@ public class Workout {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public List<Client> getClients() {
+        return clients;
     }
 }

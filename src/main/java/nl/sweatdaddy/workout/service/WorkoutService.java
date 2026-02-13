@@ -3,7 +3,9 @@ package nl.sweatdaddy.workout.service;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
+import nl.sweatdaddy.client.entity.Client;
 import nl.sweatdaddy.common.exception.ConflictException;
 import nl.sweatdaddy.common.exception.NotFoundException;
 import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
@@ -30,6 +32,12 @@ public class WorkoutService {
 
     public List<WorkoutResponseDto> getAllWorkouts() {
         return workoutRepository.findAll().stream().map(this::toDto).toList();
+    }
+
+    public WorkoutResponseDto getWorkoutById(Long id) {
+        Workout workout = workoutRepository.findById(id).orElseThrow(() -> new NotFoundException("Workout not found"));
+
+        return toDto(workout);
     }
 
 
@@ -108,6 +116,11 @@ public class WorkoutService {
         Workout workout = workoutRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Workout with id " + id + " not found"));
 
+        // ontkoppelen van de workouts aan clients
+        for (Client client : workout.getClients()) { // Let op: voeg deze relatie toe aan Workout entity of zoek ze op via de repo
+            client.getWorkoutList().remove(workout);
+        }
+
         workoutRepository.delete(workout);
 
         return toDto(workout);
@@ -117,7 +130,7 @@ public class WorkoutService {
     private WorkoutResponseDto toDto(Workout workout) {
 
         List<ExerciseResponseDto> exerciseDtos = workout.getExerciseList().stream().map(
-                exercise -> new ExerciseResponseDto(exercise.getName(), exercise.getMuscles(),
+                exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(), exercise.getMuscles(),
                                                     exercise.getMovement())).toList();
 
         return new WorkoutResponseDto(workout.getId(), workout.getName(), workout.getCreatedAt(),

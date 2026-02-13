@@ -15,6 +15,7 @@ import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.entity.Workout;
 import nl.sweatdaddy.workout.repository.WorkoutRepository;
 import org.aspectj.weaver.ast.Not;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -137,6 +138,24 @@ public class ClientService {
         return toDto(client);
     }
 
+    // alle workouts van en specifieke cliënt ophalen
+    @Transactional
+    public List<WorkoutResponseDto> getAllWorkoutsFromClient(Long id) {
+        Client client = clientRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Client not found"));
+
+        List<Workout> workoutList = client.getWorkoutList();
+
+        return workoutList.stream().map(workout -> {
+            List<ExerciseResponseDto> exerciseDtos = workout.getExerciseList().stream().map(
+                    exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(), exercise.getMuscles(),
+                                                        exercise.getMovement())).toList();
+
+            return new WorkoutResponseDto(workout.getId(), workout.getName(), workout.getCreatedAt(),
+                                          workout.getCreatedBy(), exerciseDtos, workout.getNotes());
+        }).toList();
+    }
+
     // workout van client verwijderen
     @Transactional
     public ClientResponseDto deleteWorkoutFromClient(Long id, Long workoutId) {
@@ -145,15 +164,21 @@ public class ClientService {
         Workout foundWorkout = workoutRepository.findById(workoutId).orElseThrow(
                 () -> new NotFoundException("Workout not found"));
 
-        client.getWorkoutList().remove(foundWorkout);
+        boolean removedWorkout = client.getWorkoutList().remove(foundWorkout);
+
+        if (!removedWorkout) {
+            throw new NotFoundException("No such workout to be found");
+        }
 
         return toDto(client);
     }
 
     @Transactional
     public ClientResponseDto addProfilePictureToClient(String fileName, Long clientId) {
-        Client clientFound = clientRepository.findById(clientId).orElseThrow(() -> new NotFoundException("Client not found"));
-        nl.sweatdaddy.fileUpload.entity.File fileFound = fileUploadRepository.findByFileName(fileName).orElseThrow(() -> new NotFoundException("File not found"));
+        Client clientFound = clientRepository.findById(clientId).orElseThrow(
+                () -> new NotFoundException("Client not found"));
+        nl.sweatdaddy.fileUpload.entity.File fileFound = fileUploadRepository.findByFileName(
+                fileName).orElseThrow(() -> new NotFoundException("File not found"));
 
         clientFound.setProfilePicture(fileFound);
         Client savedClient = clientRepository.save(clientFound);
@@ -167,7 +192,7 @@ public class ClientService {
         List<WorkoutResponseDto> workoutDtos = client.getWorkoutList().stream().map(
                 workout -> {
                     List<ExerciseResponseDto> exerciseDtos = workout.getExerciseList().stream().map(
-                            exercise -> new ExerciseResponseDto(exercise.getName(), exercise.getMuscles(),
+                            exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(), exercise.getMuscles(),
                                                                 exercise.getMovement())).toList();
 
                     return new WorkoutResponseDto(workout.getId(), workout.getName(), workout.getCreatedAt(),
