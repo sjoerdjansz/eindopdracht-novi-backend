@@ -36,7 +36,6 @@ public class SecurityConfig {
     private String clientId;
 
     @Bean
-
     // feitelijk de routing regels
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -44,6 +43,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
+                        // voor swagger ui
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        // overige
                         .requestMatchers("/clients/**").hasAnyAuthority("Trainer")
                         .requestMatchers("/workouts/**").hasAnyAuthority("Trainer")
                         .requestMatchers("/exercises/**").permitAll()
