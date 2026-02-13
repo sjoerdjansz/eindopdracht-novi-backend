@@ -1,21 +1,26 @@
 package nl.sweatdaddy.client.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import nl.sweatdaddy.client.dto.ClientResponseDto;
 import nl.sweatdaddy.client.dto.CreateClientRequestDto;
-import nl.sweatdaddy.client.entity.Client;
 import nl.sweatdaddy.client.repository.ClientRepository;
 import nl.sweatdaddy.client.service.ClientService;
 import nl.sweatdaddy.common.ApiResponse;
-import nl.sweatdaddy.fileUpload.service.FileUploadService;
+import nl.sweatdaddy.fileUpload.service.FileService;
 import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.service.WorkoutService;
-import org.apache.coyote.Response;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,17 +37,17 @@ public class ClientController {
     // van final omdat deze niet overschreven mag worden.
     private final ClientService clientService;
     private final WorkoutService workoutService;
-    private final FileUploadService fileUploadService;
+    private final FileService fileService;
     private final ClientRepository clientRepository;
 
     // we maken de clientController constructor die als parameter de clientService krijgt. Zodat we de
     // clientService kunnen aanroepen in de controller.
     public ClientController(ClientService clientService, WorkoutService workoutService,
-                            FileUploadService fileUploadService,
+                            FileService fileService,
                             ClientRepository clientRepository) {
         this.clientService = clientService;
         this.workoutService = workoutService;
-        this.fileUploadService = fileUploadService;
+        this.fileService = fileService;
         this.clientRepository = clientRepository;
     }
 
@@ -54,17 +59,9 @@ public class ClientController {
             String email
     ) {
 
-        List<ClientResponseDto> clients;
+        List<ClientResponseDto> clients = clientService.getClientsBasedOnFilters(firstName, email);
 
-        if (firstName != null && !firstName.isBlank()) {
-            clients = clientService.getByFirstName(firstName.trim());
-        } else if (email != null && !email.isBlank()) {
-            clients = clientService.getByEmail(email.trim());
-        } else {
-            clients = clientService.getAllClients();
-        }
-
-        return ResponseEntity.ok(new ApiResponse<>(clients, "All clients retrieved from database"));
+        return ResponseEntity.ok(new ApiResponse<>(clients, "Clients retrieved rom database"));
     }
 
     @GetMapping("/{id}")
@@ -77,7 +74,9 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/workouts")
-    public ResponseEntity<ApiResponse<List<WorkoutResponseDto>>> getClientWorkouts(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<List<WorkoutResponseDto>>> getClientWorkouts(
+            @PathVariable
+            Long id) {
         List<WorkoutResponseDto> clientWorkouts = clientService.getAllWorkoutsFromClient(id);
 
         return ResponseEntity.ok(new ApiResponse<>(clientWorkouts, "All assigned workouts retrieved"));
@@ -120,7 +119,7 @@ public class ClientController {
             @RequestParam("file")
             MultipartFile file) throws IOException {
 
-        String fileName = fileUploadService.storeFile(file);
+        String fileName = fileService.storeFile(file);
 
         ClientResponseDto clientResponseDto = clientService.addProfilePictureToClient(fileName, id);
 
@@ -130,7 +129,24 @@ public class ClientController {
         return ResponseEntity.created(URI.create(url)).body(clientResponseDto);
     }
 
-    // TODO: Delete file functionaliteit maken?
+    // profile picture downloaden
+    @GetMapping("/{id}/profile-picture/download")
+    public ResponseEntity<Resource> downloadProfilePicture(
+            @PathVariable
+            Long id, HttpServletRequest request) {
+        Resource resource = clientService.getProfilePictureFromClient(id);
+
+        String mimeType;
+
+        try {
+            mimeType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).header(
+                HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + resource.getFilename()).body(resource);
+    }
 
     // niet mogelijk om via deze endpoint de file of gekoppelde workouts te veranderen
     @PutMapping("/{id}")
@@ -168,5 +184,18 @@ public class ClientController {
         return ResponseEntity.ok(new ApiResponse<>(deletedWorkout, "Workout successfully deleted"));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<ClientResponseDto>> getMyProfile(Authentication authentication) {
+        String email = null;
+        // dit is nodig om de email uit de access token te halen en te gebruiken in de endpoint
+        // zodat de gegevens van de client opgehaald worden en alleen die specifieke en 'ingelogde' client
+        // dit kan zien
+        if (authentication instanceof JwtAuthenticationToken jwtToken) {
+            email = jwtToken.getToken().getClaimAsString("email");
+        }
+
+        ClientResponseDto dto = clientService.getByEmail(email);
+        return ResponseEntity.ok(new ApiResponse<>(dto, "Profiel gevonden"));
+    }
 
 }

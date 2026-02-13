@@ -11,15 +11,14 @@ import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
 import nl.sweatdaddy.exercise.repository.ExerciseRepository;
 import nl.sweatdaddy.fileUpload.entity.File;
 import nl.sweatdaddy.fileUpload.repository.FileUploadRepository;
+import nl.sweatdaddy.fileUpload.service.FileService;
 import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.entity.Workout;
 import nl.sweatdaddy.workout.repository.WorkoutRepository;
-import org.aspectj.weaver.ast.Not;
-import org.springframework.security.core.parameters.P;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -28,14 +27,17 @@ public class ClientService {
     private final WorkoutRepository workoutRepository;
     private final ExerciseRepository exerciseRepository;
     private final FileUploadRepository fileUploadRepository;
+    private final FileService fileService;
 
 
     public ClientService(ClientRepository clientRepository, WorkoutRepository workoutRepository,
-                         ExerciseRepository exerciseRepository, FileUploadRepository fileUploadRepository) {
+                         ExerciseRepository exerciseRepository, FileUploadRepository fileUploadRepository,
+                         FileService fileService) {
         this.clientRepository = clientRepository;
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
         this.fileUploadRepository = fileUploadRepository;
+        this.fileService = fileService;
     }
 
     // alle clienten ophalen
@@ -51,10 +53,23 @@ public class ClientService {
     }
 
     // client zoeken op email
-    public List<ClientResponseDto> getByEmail(String email) {
+    public ClientResponseDto getByEmail(String email) {
+        Client client = clientRepository.findByEmailIgnoreCase(email).orElseThrow(() ->
+        new NotFoundException("No client found with email: " + email));
 
-        return clientRepository.findByEmailIgnoreCase(
-                email).stream().map(this::toDto).toList();
+        return toDto(client);
+    }
+
+    public List<ClientResponseDto> getClientsBasedOnFilters(String firstName, String email) {
+        if (firstName != null && !firstName.isBlank()) {
+            return getByFirstName(firstName.trim());
+        }
+
+        if (email != null && !email.isBlank()) {
+            return List.of(getByEmail(email.trim()));
+        }
+
+        return getAllClients();
     }
 
     // client zoeken op id
@@ -148,7 +163,8 @@ public class ClientService {
 
         return workoutList.stream().map(workout -> {
             List<ExerciseResponseDto> exerciseDtos = workout.getExerciseList().stream().map(
-                    exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(), exercise.getMuscles(),
+                    exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(),
+                                                        exercise.getMuscles(),
                                                         exercise.getMovement())).toList();
 
             return new WorkoutResponseDto(workout.getId(), workout.getName(), workout.getCreatedAt(),
@@ -173,6 +189,7 @@ public class ClientService {
         return toDto(client);
     }
 
+    // profielfoto toevoegen aan client
     @Transactional
     public ClientResponseDto addProfilePictureToClient(String fileName, Long clientId) {
         Client clientFound = clientRepository.findById(clientId).orElseThrow(
@@ -186,13 +203,29 @@ public class ClientService {
         return toDto(clientFound);
     }
 
+    // profielfoto downloaden
+    @Transactional
+    public Resource getProfilePictureFromClient(Long id) {
+        Client clientFound = clientRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Client not found"));
+
+        File profilePicture = clientFound.getProfilePictureLocation();
+
+        if (profilePicture == null) {
+            throw new NotFoundException("Client has no profile picture yet");
+        }
+
+        return fileService.downloadFile(profilePicture.getFileName());
+    }
+
     // mapper
     private ClientResponseDto toDto(Client client) {
 
         List<WorkoutResponseDto> workoutDtos = client.getWorkoutList().stream().map(
                 workout -> {
                     List<ExerciseResponseDto> exerciseDtos = workout.getExerciseList().stream().map(
-                            exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(), exercise.getMuscles(),
+                            exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(),
+                                                                exercise.getMuscles(),
                                                                 exercise.getMovement())).toList();
 
                     return new WorkoutResponseDto(workout.getId(), workout.getName(), workout.getCreatedAt(),
