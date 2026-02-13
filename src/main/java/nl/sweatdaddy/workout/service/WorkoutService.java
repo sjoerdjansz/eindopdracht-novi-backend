@@ -130,7 +130,7 @@ public class WorkoutService {
     private WorkoutResponseDto toDto(Workout workout) {
 
         List<ExerciseResponseDto> exerciseDtos = workout.getExerciseList().stream().map(
-                exercise -> new ExerciseResponseDto(exercise.getName(), exercise.getMuscles(),
+                exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(), exercise.getMuscles(),
                                                     exercise.getMovement())).toList();
 
         return new WorkoutResponseDto(workout.getId(), workout.getName(), workout.getCreatedAt(),

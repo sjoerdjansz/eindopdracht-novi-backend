@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import nl.sweatdaddy.client.dto.ClientResponseDto;
 import nl.sweatdaddy.client.dto.CreateClientRequestDto;
 import nl.sweatdaddy.client.entity.Client;
+import nl.sweatdaddy.client.repository.ClientRepository;
 import nl.sweatdaddy.client.service.ClientService;
 import nl.sweatdaddy.common.ApiResponse;
 import nl.sweatdaddy.fileUpload.service.FileUploadService;
+import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.service.WorkoutService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -31,15 +33,17 @@ public class ClientController {
     private final ClientService clientService;
     private final WorkoutService workoutService;
     private final FileUploadService fileUploadService;
+    private final ClientRepository clientRepository;
 
     // we maken de clientController constructor die als parameter de clientService krijgt. Zodat we de
     // clientService kunnen aanroepen in de controller.
     public ClientController(ClientService clientService, WorkoutService workoutService,
-                            FileUploadService fileUploadService
-    ) {
+                            FileUploadService fileUploadService,
+                            ClientRepository clientRepository) {
         this.clientService = clientService;
         this.workoutService = workoutService;
         this.fileUploadService = fileUploadService;
+        this.clientRepository = clientRepository;
     }
 
     @GetMapping
@@ -70,6 +74,13 @@ public class ClientController {
 
         ClientResponseDto dto = clientService.getClientById(id);
         return ResponseEntity.ok(new ApiResponse<>(dto, "Client found"));
+    }
+
+    @GetMapping("/{id}/workouts")
+    public ResponseEntity<ApiResponse<List<WorkoutResponseDto>>> getClientWorkouts(@PathVariable Long id) {
+        List<WorkoutResponseDto> clientWorkouts = clientService.getAllWorkoutsFromClient(id);
+
+        return ResponseEntity.ok(new ApiResponse<>(clientWorkouts, "All assigned workouts retrieved"));
     }
 
     @PostMapping
@@ -117,11 +128,11 @@ public class ClientController {
                 Objects.requireNonNull(id.toString())).path("profile-picture").toUriString();
 
         return ResponseEntity.created(URI.create(url)).body(clientResponseDto);
-
     }
 
     // TODO: Delete file functionaliteit maken?
 
+    // niet mogelijk om via deze endpoint de file of gekoppelde workouts te veranderen
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ClientResponseDto>> updateClient(
             @PathVariable

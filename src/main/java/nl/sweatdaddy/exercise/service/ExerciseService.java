@@ -9,6 +9,7 @@ import nl.sweatdaddy.exercise.dto.ExerciseResponseDto;
 import nl.sweatdaddy.exercise.entity.Exercise;
 import nl.sweatdaddy.common.exception.ConflictException;
 import nl.sweatdaddy.exercise.repository.ExerciseRepository;
+import nl.sweatdaddy.workout.entity.Workout;
 import org.springframework.stereotype.Service;
 import nl.sweatdaddy.common.exception.NotFoundException;
 
@@ -34,7 +35,8 @@ public class ExerciseService {
     // hier zit de mapper nog in de stream, later nog omzetten naar de mapper functie.
     public List<ExerciseResponseDto> getAllExercises() {
         return exerciseRepository.findAll().stream()
-                .map(exercise -> new ExerciseResponseDto(exercise.getName(), exercise.getMuscles(),
+                .map(exercise -> new ExerciseResponseDto(exercise.getId(), exercise.getName(),
+                                                         exercise.getMuscles(),
                                                          exercise.getMovement())).toList();
     }
 
@@ -75,11 +77,11 @@ public class ExerciseService {
                 request.getMovement()
         );
         Exercise saved = exerciseRepository.save(entity);
-        return new ExerciseResponseDto(saved.getName(), saved.getMuscles(), saved.getMovement());
+        return new ExerciseResponseDto(saved.getId(), saved.getName(), saved.getMuscles(),
+                                       saved.getMovement());
     }
 
-
-    // Overwoog eerst een updateDto te maken, maar niet nodig voor dit project.
+    // TODO: evt. later een update dto maken, maar voor de huidige scope niet nodig.
     @Transactional
     public ExerciseResponseDto update(Long id, CreateExerciseRequestDto request) {
         Exercise exercise = exerciseRepository.findById(id)
@@ -99,6 +101,12 @@ public class ExerciseService {
         Exercise exercise = exerciseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can't find exercise with id: " + id));
 
+        // TODO: nadeel van het verwijderen van een exercise is dat de oefening ook in elke workout
+        //  template wordt verwijderd. Eigenlijk is een soft delete beter, voor later.
+        for (Workout workout : exercise.getWorkouts()) {
+            workout.getExerciseList().remove(exercise);
+        }
+
         exerciseRepository.delete(exercise);
 
         return toDto(exercise);
@@ -106,7 +114,8 @@ public class ExerciseService {
 
     // mapper
     private ExerciseResponseDto toDto(Exercise exercise) {
-        return new ExerciseResponseDto(exercise.getName(), exercise.getMuscles(), exercise.getMovement());
+        return new ExerciseResponseDto(exercise.getId(), exercise.getName(), exercise.getMuscles(),
+                                       exercise.getMovement());
     }
 
 

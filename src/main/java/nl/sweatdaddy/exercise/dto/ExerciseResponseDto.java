@@ -6,27 +6,32 @@ package nl.sweatdaddy.exercise.dto;
 // Hij wordt gebruikt om de exercise gegevens gestructureerd te houden tussen meerdere lagen van API.
 // De DTO wordt op meerdere plekken gebruikt, zoals controller, service, mapper of in tests.
 public class ExerciseResponseDto {
+    private final Long id;
+    private final String name;
+    private final String muscles;
+    private final String movement;
 
-  private final String name;
-  private final String muscles;
-  private final String movement;
+    public ExerciseResponseDto(Long id, String name, String muscles, String movement) {
+        this.id = id;
+        this.name = name;
+        this.muscles = muscles;
+        this.movement = movement;
+    }
 
-  public ExerciseResponseDto(String name, String muscles, String movement) {
-    this.name = name;
-    this.muscles = muscles;
-    this.movement = movement;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getMuscles() {
-    return muscles;
-  }
+    public String getMuscles() {
+        return muscles;
+    }
 
-  public String getMovement() {
-    return movement;
-  }
+    public String getMovement() {
+        return movement;
+    }
 
 }

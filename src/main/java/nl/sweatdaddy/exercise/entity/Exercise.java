@@ -1,11 +1,10 @@
 package nl.sweatdaddy.exercise.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import nl.sweatdaddy.workout.entity.Workout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "exercises")
@@ -20,6 +19,9 @@ public class Exercise {
   private String muscles;
   @Column(nullable = false)
   private String movement;
+
+    @ManyToMany(mappedBy = "exerciseList")
+    private List<Workout> workouts = new ArrayList<>();
 
   protected Exercise() {
   }
@@ -62,4 +64,7 @@ public class Exercise {
   public void setMovement(String movement) {
     this.movement = movement;
   }
+    public List<Workout> getWorkouts() {
+        return workouts;
+    }
 }
