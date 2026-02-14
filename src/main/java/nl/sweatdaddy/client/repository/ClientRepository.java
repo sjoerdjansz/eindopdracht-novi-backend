@@ -15,5 +15,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     boolean existsByEmailIgnoreCase(String email);
     boolean existsByEmailIgnoreCaseAndIdNot(String email, Long id);
 
+    Optional<Client> findClientById(Long id);
+    
     String firstName(String firstName);
 }
