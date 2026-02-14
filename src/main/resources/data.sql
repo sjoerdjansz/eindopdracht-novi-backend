@@ -86,6 +86,10 @@ INSERT INTO workout_exercises (workout_id, exercise_id) VALUES (3, 6);  -- barbe
 INSERT INTO workout_exercises (workout_id, exercise_id) VALUES (3, 9);  -- lat pulldown
 
 -- CLIENTS
+
+INSERT INTO clients (first_name, last_name, email, birthday, created_at)
+VALUES ('Test', 'Client', 'testclient@sweatdaddy.com', '1970-12-20', NOW());
+
 INSERT INTO clients (first_name, last_name, email, birthday, created_at)
 VALUES ('Sjoerd', 'Jansz', 'sjoerd.jansz@example.com', '1989-04-12', NOW());
 

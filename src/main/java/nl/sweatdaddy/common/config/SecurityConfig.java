@@ -18,6 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.http.HttpMethod;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,9 +49,13 @@ public class SecurityConfig {
                         // voor swagger ui
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // overige
-                        .requestMatchers("/clients/**").hasAnyAuthority("Trainer")
+                        // eerst de specifieke matchen en daarna pas wild cards
+                        .requestMatchers(HttpMethod.GET, "/clients/me").hasAnyAuthority("Client")
+                        .requestMatchers(HttpMethod.GET, "/exercises/**").hasAnyAuthority("Client", "Trainer")
                         .requestMatchers("/workouts/**").hasAnyAuthority("Trainer")
-                        .requestMatchers("/exercises/**").permitAll()
+                        .requestMatchers("/exercises/**").hasAnyAuthority("Trainer")
+                        .requestMatchers("/clients/**").hasAnyAuthority("Trainer")
+                        // deze past aan het einde zodat deze niet al de toegang blokkeert voordat de andere matchers zijn nagegaan
                         .anyRequest().denyAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
