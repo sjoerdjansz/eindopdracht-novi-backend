@@ -105,15 +105,15 @@ public class Client {
         return workoutList;
     }
 
-    public void setWorkoutList(List<Workout> workoutList) {
-        this.workoutList = workoutList;
-    }
-
     public File getProfilePictureLocation() {
         return clientProfilePicture;
     }
 
     public void setProfilePicture(File clientProfilePicture) {
         this.clientProfilePicture = clientProfilePicture;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -25,8 +25,6 @@ public class CreateClientRequestDto {
     @NotNull(message = "Invalid birthday")
     private LocalDate birthday;
 
-    private List<Long> workoutIds;
-
     public String getFirstName() {
         return firstName;
     }
@@ -43,7 +41,15 @@ public class CreateClientRequestDto {
         return birthday;
     }
 
-    public List<Long> getWorkoutIds() {
-        return workoutIds;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -20,6 +20,7 @@ bijhouden. Als trainer kan je registreren en inloggen, cliëntprofielen maken, w
 koppelen aan cliënten, en oefeningen toevoegen aan de exercise list. De API bevat beveiligde endpoints voor
 gebruikers met de 'Trainer' en 'Client' rol.
 Het doel van de applicatie is om het bijhouden van de voortgang van cliënten leuker en gemakkelijker te maken.
+
 ---
 
 ## Projectstructuur
@@ -96,7 +97,7 @@ De applicatie maakt gebruik van **JUnit 5**, **Mockito** en **WebMvcTest**.
 
 - Om alle tests uit te voeren: `mvn test`
 - De tests bevinden zich in de map `src/test/java`.
-- Er zijn integratietests voor controllers en unit-tests voor de service-lagen met volledige dekking.
+- Er zijn twee integratietests voor de `ExerciseController` en unit-tests voor twee service lagen.
 
 ---
 
@@ -135,7 +136,7 @@ bovenstaande SwaggerUI link te gebruiken.
 
 | Methode  | Endpoint                                 | Rol            | Beschrijving                                                 |
 |:---------|:-----------------------------------------|:---------------|:-------------------------------------------------------------|
-| **GET**  | `/clients/me`                            | Client/Trainer | Haalt het profiel op van de momenteel 'ingelogde' gebruiker. |
+| **GET**  | `/clients/me`                            | Client         | Haalt het profiel op van de momenteel 'ingelogde' gebruiker. |
 | **GET**  | `/exercises`                             | Client/Trainer | Toont een overzicht van alle beschikbare oefeningen.         |
 | **GET**  | `/clients`                               | Trainer        | Haalt een lijst op van alle geregistreerde cliënten.         |
 | **POST** | `/clients`                               | Trainer        | Maakt een nieuwe cliënt aan.                                 |

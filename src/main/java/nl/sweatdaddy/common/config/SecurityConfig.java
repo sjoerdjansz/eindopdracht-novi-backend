@@ -1,5 +1,6 @@
 package nl.sweatdaddy.common.config;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@Profile("!test")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
