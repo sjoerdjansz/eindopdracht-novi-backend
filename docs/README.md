@@ -36,7 +36,7 @@ Per domein is de structuur onderverdeeld in `controller`, `service`, `repository
 
 ---
 
-## Gebruikte Technieken
+## Gebruikte technieken
 
 - **Java 21**: de programmeertaal en versie van de applicatie
 - **Spring Boot 4.0.2**: het framework voor de API en security
@@ -48,7 +48,7 @@ Per domein is de structuur onderverdeeld in `controller`, `service`, `repository
 
 ---
 
-## Installatie & Configuratie
+## Installatie en configuratie
 
 ### Benodigdheden
 
@@ -90,7 +90,7 @@ Per domein is de structuur onderverdeeld in `controller`, `service`, `repository
 
 ---
 
-## Tests Uitvoeren
+## Tests uitvoeren
 
 De applicatie maakt gebruik van **JUnit 5**, **Mockito** en **WebMvcTest**.
 
@@ -100,23 +100,45 @@ De applicatie maakt gebruik van **JUnit 5**, **Mockito** en **WebMvcTest**.
 
 ---
 
-### 2. Gebruik van endpoints via Postman Collectie (JSON) of SwaggerUI
+## Gebruik van endpoints via Postman collectie (JSON) of SwaggerUI
 
-Importeer de bijgevoegde Trainer en Client collections in Postman om gebruik te maken van de verschillende endpoints of
-gebruik de SwaggerUI link: `http://localhost:8080/swagger-ui.html`
+Importeer de bijgevoegde Trainer en Client collections in Postman om gebruik te maken van de verschillende
+endpoints en/of gebruik de SwaggerUI link: `http://localhost:8080/swagger-ui.html`
 
 ---
 
-### 3. API-Documentatie (PDF/Handleiding) 
+## Test gebruikers en user-rollen
 
-### // TODO: API ENDPOINT DOCUMENTATIE AFMAKEN OF IN APARTE PDF, NAAST SWAGGER
+Voor de applicatie zijn twee typen gebruikers gemaakt, namelijk: Trainers en Clients. De applicatie is met
+name geschreven vanuit het oogpunt en gebruik van de Trainer. De rol van de Client is vooralsnog kleiner.
 
-| Methode | Endpoint | Rol | Beschrijving |
-|:--- |:--- |:--- |:--- |
-| **GET** | `/clients/me` | Client/Trainer | Haalt het profiel op van de momenteel ingelogde gebruiker. |
-| **GET** | `/exercises` | Client/Trainer | Toont een overzicht van alle beschikbare oefeningen. |
-| **GET** | `/clients` | Trainer | Haalt een lijst op van alle geregistreerde cliënten. |
-| **POST** | `/clients` | Trainer | Maakt een nieuwe cliënt aan (vereist DTO met email, naam, etc.). |
-| **GET** | `/workouts` | Trainer | Overzicht van alle gemaakte workout-schema's. |
-| **POST** | `/clients/{id}/profile-picture` | Trainer | Uploadt een profielfoto (MultipartFile) voor een specifieke cliënt. |
-| **GET** | `/clients/{id}/profile-picture/download` | Client/Trainer | Downloadt/bekijkt de profielfoto als afbeelding. |
+**De inloggegevens van beide gebruikers/rollen:**
+
+**Trainer (full access)**
+
+- Naam: `testuser`
+- Wachtwoord: `test`
+
+**Client (limited access)**
+
+- Naam: `testclient`
+- Wachtwoord: `test`
+- Email: `testclient@sweatdaddy.com`
+
+---
+
+## API documentatie
+
+Onderstaand is een beknopt overzicht van slechts enkele van de API endpoints. Voor een volledig overzicht,
+meer informatie en benodigde gegevens is het raadzaam om de volledige API Documentatie te lezen of de
+bovenstaande SwaggerUI link te gebruiken.
+
+| Methode  | Endpoint                                 | Rol            | Beschrijving                                                 |
+|:---------|:-----------------------------------------|:---------------|:-------------------------------------------------------------|
+| **GET**  | `/clients/me`                            | Client/Trainer | Haalt het profiel op van de momenteel 'ingelogde' gebruiker. |
+| **GET**  | `/exercises`                             | Client/Trainer | Toont een overzicht van alle beschikbare oefeningen.         |
+| **GET**  | `/clients`                               | Trainer        | Haalt een lijst op van alle geregistreerde cliënten.         |
+| **POST** | `/clients`                               | Trainer        | Maakt een nieuwe cliënt aan.                                 |
+| **GET**  | `/workouts`                              | Trainer        | Haal alle gemaakte workouts op.                              |
+| **POST** | `/clients/{id}/profile-picture`          | Trainer        | Uploadt een profielfoto voor een specifieke cliënt.          |
+| **GET**  | `/clients/{id}/profile-picture/download` | Client/Trainer | Downloadt de profielfoto als afbeelding.                     |

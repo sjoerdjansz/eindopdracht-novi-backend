@@ -30,8 +30,7 @@ public class Client {
 
     @ManyToMany
     // join table is nu simpel en feitelijk anoniem. Voor in de toekomst is een eigen join entity eventueel
-    // handig zodat
-    // metadata ook gebruikt kan worden en ik invloed kan uitoefenen op meer data en informatie.
+    // handig zodat metadata ook gebruikt kan worden en ik invloed kan uitoefenen op meer data en informatie.
     @JoinTable(
             name = "client_workouts",
             joinColumns = @JoinColumn(name = "client_id"),

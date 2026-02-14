@@ -41,7 +41,7 @@ public class ExerciseController {
         List<ExerciseResponseDto> exercises;
 
         if (name != null && !name.isBlank()) {
-            exercises = exerciseService.getByName(name); // toevoegen aan service
+            exercises = exerciseService.getByName(name);
         } else if (muscles != null && !muscles.isBlank()) {
             exercises = exerciseService.getByMuscles(muscles);
         } else if (movement != null && !movement.isBlank()) {
