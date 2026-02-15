@@ -124,3 +124,38 @@ VALUES (2, 4);
 
 INSERT INTO client_workouts (client_id, workout_id)
 VALUES (3, 5);
+
+-- WORKOUT_SESSIONS
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (1, 1, '2026-02-01T09:00:00', TRUE, 'Felt strong today. Focused on form.', 55);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (1, 2, '2026-02-04T18:30:00', TRUE, 'Shoulders a bit tight, reduced volume.', 45);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (1, 1, '2026-02-08T10:15:00', FALSE, 'Started late, had to stop early.', 25);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (2, 3, '2026-02-03T07:30:00', TRUE, 'Good pull session. Pull-ups improving.', 50);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (2, 4, '2026-02-06T07:20:00', TRUE, 'Heavy squats. RPE high.', 60);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (3, 5, '2026-02-02T17:45:00', TRUE, 'Glute burn, added extra hip thrust sets.', 65);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (3, 5, '2026-02-09T17:50:00', TRUE, 'Second time this week. Less rest.', 58);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (4, 1, '2026-02-05T19:00:00', TRUE, 'Full body felt good. Deadlift technique focus.', 52);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (5, 2, '2026-02-07T11:00:00', FALSE, 'Energy low, stopped after warm-up + bench.', 20);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (6, 3, '2026-02-10T08:10:00', TRUE, 'Back felt great. Added lat pulldown.', 48);
+
+INSERT INTO workout_sessions (client_id, workout_id, session_date, completed, notes, duration_in_minutes)
+VALUES (7, 4, '2026-02-11T16:30:00', TRUE, 'Leg day. Kept it controlled, no pain.', 57);

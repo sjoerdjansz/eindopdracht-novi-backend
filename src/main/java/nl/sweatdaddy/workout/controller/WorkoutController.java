@@ -8,7 +8,6 @@ import nl.sweatdaddy.common.ApiResponse;
 import nl.sweatdaddy.workout.dto.CreateWorkoutRequestDto;
 import nl.sweatdaddy.workout.dto.WorkoutResponseDto;
 import nl.sweatdaddy.workout.service.WorkoutService;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

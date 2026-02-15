@@ -27,15 +27,13 @@ public class ExerciseControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private ExerciseRepository exerciseRepository;
-    @Autowired
     private ObjectMapper objectMapper;
 
     @MockitoBean
     private JwtDecoder jwtDecoder;
 
     @Test
-    void getExerciseById_shouldReturnExercise_whenExerciseExistsInDatabase() throws Exception {
+    void getExerciseById_returnExerciseIfFound() throws Exception {
         mockMvc.perform(get("/exercises/{id}", 1L).accept(MediaType.APPLICATION_JSON)).andExpect(
                         status().isOk())
                 .andExpect(status().isOk())
@@ -47,7 +45,7 @@ public class ExerciseControllerIntegrationTest {
     }
 
     @Test
-    void createExercise_shouldCreateAndReturnExercise() throws Exception {
+    void createExercise() throws Exception {
         CreateExerciseRequestDto request = new CreateExerciseRequestDto();
         request.setName("Low Bar Squat");
         request.setMuscles("Quadriceps");
