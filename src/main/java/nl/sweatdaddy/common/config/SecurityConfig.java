@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/clients/me").hasAnyAuthority("Client")
                         .requestMatchers(HttpMethod.GET, "/exercises/**").hasAnyAuthority("Client", "Trainer")
                         .requestMatchers("/workouts/**").hasAnyAuthority("Trainer")
+                        .requestMatchers("/sessions/**").hasAnyAuthority("Trainer")
                         .requestMatchers("/exercises/**").hasAnyAuthority("Trainer")
                         .requestMatchers("/clients/**").hasAnyAuthority("Trainer")
                         // deze past aan het einde zodat deze niet al de toegang blokkeert voordat de andere matchers zijn nagegaan
