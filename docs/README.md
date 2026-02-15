@@ -17,9 +17,8 @@
 
 Sweat Daddy is een softwareoplossing voor personal trainers die de voortgang van hun cliënten willen
 bijhouden. Als trainer kan je registreren en inloggen, cliëntprofielen maken, workouts creëren en deze
-koppelen aan cliënten, en oefeningen toevoegen aan de exercise list. De API bevat beveiligde endpoints voor
-gebruikers met de 'Trainer' en 'Client' rol.
-Het doel van de applicatie is om het bijhouden van de voortgang van cliënten leuker en gemakkelijker te maken.
+koppelen aan cliënten, workout sessie instanties maken en oefeningen toevoegen aan de exercise list. De API bevat beveiligde endpoints voor
+gebruikers met de 'Trainer' en 'Client' rol. Het doel van de applicatie is om het bijhouden van de voortgang van cliënten leuker en gemakkelijker te maken.
 
 ---
 
@@ -31,6 +30,7 @@ Het project volgt de volgende architectuur:
 - `nl.sweatdaddy.client`: Beheer van cliëntgegevens
 - `nl.sweatdaddy.exercise`: Beheer van de oefeningenbibliotheek
 - `nl.sweatdaddy.workout`: Beheer van workouts
+- `nl.sweatdaddy.workoutSessions`: Beheer van de workout sessions
 - `nl.sweatdaddy.fileUpload`: File up- en download
 
 Per domein is de structuur onderverdeeld in `controller`, `service`, `repository`, `entity` en `dto`.
@@ -113,7 +113,7 @@ endpoints en/of gebruik de SwaggerUI link: `http://localhost:8080/swagger-ui.htm
 Voor de applicatie zijn twee typen gebruikers gemaakt, namelijk: Trainers en Clients. De applicatie is met
 name geschreven vanuit het oogpunt en gebruik van de Trainer. De rol van de Client is vooralsnog kleiner.
 
-**De inloggegevens van beide gebruikers/rollen:**
+**De inloggegevens van beide gebruikers/rollen i.r.t. Keycloak zijn:**
 
 **Trainer (full access)**
 
@@ -131,15 +131,16 @@ name geschreven vanuit het oogpunt en gebruik van de Trainer. De rol van de Clie
 ## API documentatie
 
 Onderstaand is een beknopt overzicht van slechts enkele van de API endpoints. Voor een volledig overzicht,
-meer informatie en benodigde gegevens is het raadzaam om de volledige API Documentatie te lezen of de
-bovenstaande SwaggerUI link te gebruiken.
+meer informatie en benodigde gegevens is het raadzaam om de volledige `API Documentatie` te lezen of de
+eerder benoemde `SwaggerUI` link te gebruiken.
 
-| Methode  | Endpoint                                 | Rol            | Beschrijving                                                 |
-|:---------|:-----------------------------------------|:---------------|:-------------------------------------------------------------|
-| **GET**  | `/clients/me`                            | Client         | Haalt het profiel op van de momenteel 'ingelogde' gebruiker. |
-| **GET**  | `/exercises`                             | Client/Trainer | Toont een overzicht van alle beschikbare oefeningen.         |
-| **GET**  | `/clients`                               | Trainer        | Haalt een lijst op van alle geregistreerde cliënten.         |
-| **POST** | `/clients`                               | Trainer        | Maakt een nieuwe cliënt aan.                                 |
-| **GET**  | `/workouts`                              | Trainer        | Haal alle gemaakte workouts op.                              |
-| **POST** | `/clients/{id}/profile-picture`          | Trainer        | Uploadt een profielfoto voor een specifieke cliënt.          |
-| **GET**  | `/clients/{id}/profile-picture/download` | Client/Trainer | Downloadt de profielfoto als afbeelding.                     |
+| Methode  | Endpoint                                    | Rol            | Beschrijving                                                 |
+|:---------|:--------------------------------------------|:---------------|:-------------------------------------------------------------|
+| **GET**  | `/clients/me`                               | Client         | Haalt het profiel op van de momenteel 'ingelogde' gebruiker. |
+| **GET**  | `/exercises`                                | Client/Trainer | Toont een overzicht van alle beschikbare oefeningen.         |
+| **GET**  | `/clients`                                  | Trainer        | Haalt een lijst op van alle geregistreerde cliënten.         |
+| **POST** | `/clients`                                  | Trainer        | Maakt een nieuwe cliënt aan.                                 |
+| **GET**  | `/workouts`                                 | Trainer        | Haal alle gemaakte workouts op.                              |
+| **GET**  | `/sessions?min=30&max=50`                   | Trainer        | Haalt alle workout sessies tussen specifieke waarden.        |
+| **POST** | `/clients/{id}/profile-picture`             | Trainer        | Uploadt een profielfoto voor een specifieke cliënt.          |
+| **GET**  | `/clients/{id}/profile-picture/download`    | Client/Trainer | Downloadt de profielfoto als afbeelding.                     |

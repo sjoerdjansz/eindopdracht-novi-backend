@@ -47,4 +47,28 @@ public class CreateWorkoutSessionDto {
     public Integer getDurationInMinutes() {
         return durationInMinutes;
     }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setWorkoutId(Long workoutId) {
+        this.workoutId = workoutId;
+    }
+
+    public void setSessionDate(LocalDateTime sessionDate) {
+        this.sessionDate = sessionDate;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public void setDurationInMinutes(Integer durationInMinutes) {
+        this.durationInMinutes = durationInMinutes;
+    }
 }

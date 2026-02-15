@@ -29,14 +29,6 @@ import static org.mockito.Mockito.*;
 public class ClientServiceTest {
     @Mock
     ClientRepository clientRepository;
-    @Mock
-    WorkoutRepository workoutRepository;
-    @Mock
-    ExerciseRepository exerciseRepository;
-    @Mock
-    FileUploadRepository fileUploadRepository;
-    @Mock
-    FileService fileService;
 
     @InjectMocks
     ClientService clientService;
@@ -152,7 +144,7 @@ public class ClientServiceTest {
 
         Long id = 1L;
 
-        Client client = new Client("John", "Petrucci","john@mail.com", null, List.of(), null);
+        Client client = new Client("John", "Petrucci", "john@mail.com", null, List.of(), null);
 
         client.setId(id);
 

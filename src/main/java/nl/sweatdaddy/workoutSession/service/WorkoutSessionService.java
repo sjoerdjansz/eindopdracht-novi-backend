@@ -7,14 +7,10 @@ import nl.sweatdaddy.common.exception.ConflictException;
 import nl.sweatdaddy.common.exception.NotFoundException;
 import nl.sweatdaddy.workout.entity.Workout;
 import nl.sweatdaddy.workout.repository.WorkoutRepository;
-import nl.sweatdaddy.workoutSession.controller.WorkoutSessionController;
 import nl.sweatdaddy.workoutSession.dto.CreateWorkoutSessionDto;
 import nl.sweatdaddy.workoutSession.dto.WorkoutSessionResponseDto;
 import nl.sweatdaddy.workoutSession.entity.WorkoutSession;
 import nl.sweatdaddy.workoutSession.repository.WorkoutSessionRepository;
-import org.apache.coyote.Response;
-import org.hibernate.jdbc.Work;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
