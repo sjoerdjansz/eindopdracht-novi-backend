@@ -8,6 +8,7 @@ import java.util.List;
 
 import nl.sweatdaddy.client.entity.Client;
 import nl.sweatdaddy.exercise.entity.Exercise;
+import nl.sweatdaddy.workoutSession.entity.WorkoutSession;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -30,6 +31,12 @@ public class Workout {
 
     @ManyToMany(mappedBy = "workoutList")
     private List<Client> clients = new ArrayList<>();
+
+    // een workout heeft meerdere workout_sessions
+    // mapped by betekent dat de relatie wordt beheerd door de workout variabele in WorkoutSession
+    // de cascade all betekent dat ook de sessions verwijderd moeten worden als de workout wordt verwijderd
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
+    private List<WorkoutSession> workoutSessions = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

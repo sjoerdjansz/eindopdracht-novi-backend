@@ -3,6 +3,7 @@ package nl.sweatdaddy.client.entity;
 import jakarta.persistence.*;
 import nl.sweatdaddy.fileUpload.entity.File;
 import nl.sweatdaddy.workout.entity.Workout;
+import nl.sweatdaddy.workoutSession.entity.WorkoutSession;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
@@ -27,6 +28,11 @@ public class Client {
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    // Een client heeft meerdere workout_sessions
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<WorkoutSession> workoutSessions = new ArrayList<>();
+
 
     @ManyToMany
     // join table is nu simpel en feitelijk anoniem. Voor in de toekomst is een eigen join entity eventueel
